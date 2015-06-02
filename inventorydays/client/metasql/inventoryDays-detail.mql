@@ -1,0 +1,42 @@
+-- Group: inventoryDays
+-- Name:  detail
+-- Notes: Inventory Days calculation
+SELECT sh.item_number, sh.item_descrip1, warehous_code, classcode_code, itemsite_leadtime,
+  SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char(current_date::date, 'Mon-YYYY') THEN cohist_qtyshipped ELSE 0 END) as current_month_qty, 
+  SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char(current_date::date, 'Mon-YYYY') THEN extprice ELSE 0 END) as current_month_val,
+  SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char((current_date - INTERVAL '1 mon')::date, 'Mon-YYYY') THEN cohist_qtyshipped ELSE 0 END) as month1_qty, 
+  SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char((current_date - INTERVAL '1 mon')::date, 'Mon-YYYY') THEN extprice ELSE 0 END) as month1_val,
+  SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char((current_date - INTERVAL '2 mon')::date, 'Mon-YYYY') THEN cohist_qtyshipped ELSE 0 END) as month2_qty, 
+  SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char((current_date - INTERVAL '2 mon')::date, 'Mon-YYYY') THEN extprice ELSE 0 END) as month2_val,
+  SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char((current_date - INTERVAL '3 mon')::date, 'Mon-YYYY') THEN cohist_qtyshipped ELSE 0 END) as month3_qty, 
+  SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char((current_date - INTERVAL '3 mon')::date, 'Mon-YYYY') THEN extprice ELSE 0 END) as month3_val,
+  itemsite_qtyonhand AS qoh,
+  qtyordered(its.itemsite_id, COALESCE(<? value("cutoff") ?>, (current_date + itemsite_leadtime))) AS qtyonorder,
+  itemsite_value AS inventory_value,
+  itemsite_qtyonhand /
+  GREATEST((SUM(CASE WHEN to_char(cohist_invcdate, 'YYYYMM') BETWEEN to_char((current_date - INTERVAL '3 mon')::date, 'YYYYMM') AND to_char((current_date - INTERVAL '1 mon')::date, 'YYYYMM') THEN cohist_qtyshipped ELSE 0 END)/((DATE_TRUNC('month', (current_date - interval '1 mon') + '1 month'::interval) - '1 day'::interval)::date
+   - (DATE_TRUNC('month', (current_date - interval '3 mon')))::date)),0.1)
+    AS inventorydays,
+  CASE WHEN ((itemsite_qtyonhand /
+  GREATEST((SUM(CASE WHEN to_char(cohist_invcdate, 'YYYYMM') BETWEEN to_char((current_date - INTERVAL '3 mon')::date, 'YYYYMM') AND to_char((current_date - INTERVAL '1 mon')::date, 'YYYYMM') THEN cohist_qtyshipped ELSE 0 END)/((DATE_TRUNC('month', (current_date - interval '1 mon') + '1 month'::interval) - '1 day'::interval)::date
+   - (DATE_TRUNC('month', (current_date - interval '3 mon')))::date)),0.1)) > itemsite_leadtime) THEN 'red' END AS inventorydays_qtforegroundrole   
+FROM itemsite its
+LEFT OUTER JOIN saleshistory sh ON (sh.cohist_itemsite_id=its.itemsite_id)
+JOIN item i ON (sh.item_id=i.item_id)
+JOIN classcode ON (classcode_id=item_classcode_id)
+WHERE (to_char(cohist_invcdate, 'YYYYMM') > to_char((current_date - INTERVAL '4 mon')::date, 'YYYYMM')
+      OR cohist_invcdate IS NULL) 
+AND item_sold
+AND item_active
+AND itemsite_active      
+<? if exists("classcode") ?>
+  AND item_classcode_id=<? value("classcode") ?> 
+<? endif ?>
+<? if exists("item_id") ?>
+  AND item_id=<? value("item_id") ?>
+<? endif ?>
+<? if not exists("showObsolete") ?>
+  AND itemsite_posupply
+<? endif ?>
+GROUP BY 1,2,3,4, its.itemsite_id, its.itemsite_leadtime
+ORDER BY 3,4,1

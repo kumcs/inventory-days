@@ -1,0 +1,52 @@
+<package id="inventorydays"
+         name="inventorydays"
+         developer="Pentuple Consulting New Zealand"
+         descrip="Inventory Days of Stock Report"
+         version="1.1.0"
+         updater="2.2.5">
+  <pkgnotes>Inventory Days of Stock add-on package for xTuple ERP.
+
+        This file is part of the Inventory Days of Stock customisation package for xTuple ERP,
+        Copyright (c) 2015 by Pentuple Consulting New Zealand (www.pentuple.co.nz).
+        It is licensed to you under the Common Public Attribution License
+        version 1.0, the full text of which (including xTuple-specific Exhibits)
+        is available at www.xtuple.com/CPAL.  By using this software, you agree
+        to be bound by its terms.
+  </pkgnotes>
+
+  <prerequisite type="Query"
+                name="xTuple ERP version">
+    <query>
+      SELECT (SUBSTRING(fetchMetricText('ServerVersion') FOR 1) >= '4');
+    </query>
+    <message>
+      This version of the Inventory Days of Stock customisation package only works with xTuple ERP
+      versions 4.0.0 and greater.
+    </message>
+  </prerequisite>
+
+  <prerequisite type="license" name="xTuple Concise EULA">
+    <message>
+      &lt;p>
+        Inventory Days of Stock customisation add-on package for xTuple ERP.
+
+        This file is part of the Inventory Days of Stock customisation package for xTuple ERP,
+        Copyright (c) 2015 by Pentuple Consulting New Zealand (www.pentuple.co.nz).
+        It is licensed to you under the Common Public Attribution License
+        version 1.0, the full text of which (including xTuple-specific Exhibits)
+        is available at www.xtuple.com/CPAL.  By using this software, you agree
+        to be bound by its terms.
+      &lt;/p>
+    </message>
+  </prerequisite>
+
+  <script file="database/schemacomments.sql" />
+
+  <loadappscript file="client/scripts/initMenu.js"              name="initMenu"      order="1"/>
+  <loadappscript file="client/scripts/dspInventoryDays.js"      name="dspInventoryDays" order="0"/>
+  
+  <loadmetasql file="client/metasql/inventoryDays-detail.mql" order="0">Inventory Days of Stock</loadmetasql>
+  
+  <loadreport  file="client/reports/InventoryDays.xml" />
+
+</package>
