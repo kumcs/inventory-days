@@ -1,7 +1,7 @@
 -- Group: inventoryDays
 -- Name:  detail
 -- Notes: Inventory Days calculation
-SELECT sh.item_number, sh.item_descrip1, warehous_code, classcode_code, itemsite_leadtime,
+SELECT sh.item_number, sh.item_descrip1, warehous_code, cc.classcode_code, itemsite_leadtime,
   SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char(current_date::date, 'Mon-YYYY') THEN cohist_qtyshipped ELSE 0 END) as current_month_qty, 
   SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char(current_date::date, 'Mon-YYYY') THEN extprice ELSE 0 END) as current_month_val,
   SUM(CASE WHEN to_char(cohist_invcdate, 'Mon-YYYY') = to_char((current_date - INTERVAL '1 mon')::date, 'Mon-YYYY') THEN cohist_qtyshipped ELSE 0 END) as month1_qty, 
@@ -23,7 +23,7 @@ SELECT sh.item_number, sh.item_descrip1, warehous_code, classcode_code, itemsite
 FROM itemsite its
 LEFT OUTER JOIN saleshistory sh ON (sh.cohist_itemsite_id=its.itemsite_id)
 JOIN item i ON (sh.item_id=i.item_id)
-JOIN classcode ON (classcode_id=item_classcode_id)
+JOIN classcode cc ON (cc.classcode_id=item_classcode_id)
 WHERE (to_char(cohist_invcdate, 'YYYYMM') > to_char((current_date - INTERVAL '4 mon')::date, 'YYYYMM')
       OR cohist_invcdate IS NULL) 
 AND item_sold
