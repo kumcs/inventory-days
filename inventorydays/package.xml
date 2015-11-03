@@ -2,7 +2,7 @@
          name="inventorydays"
          developer="Pentuple Consulting New Zealand"
          descrip="Inventory Days of Stock Report"
-         version="1.2.0"
+         version="1.2.1"
          updater="2.2.5">
   <pkgnotes>Inventory Days of Stock add-on package for xTuple ERP.
 

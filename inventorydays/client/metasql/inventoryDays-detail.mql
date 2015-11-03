@@ -56,7 +56,7 @@ JOIN item i ON (sh.item_id=i.item_id)
 JOIN classcode cc ON (cc.classcode_id=item_classcode_id)
 WHERE ((true)
 <? if exists("show12months") ?>
-     AND (to_char(cohist_invcdate, 'YYYYMM') > to_char((current_date - INTERVAL '12 mon')::date, 'YYYYMM')
+     AND (to_char(cohist_invcdate, 'YYYYMM') > to_char((current_date - INTERVAL '13 mon')::date, 'YYYYMM')
       OR cohist_invcdate IS NULL) 
 <? else ?>
      AND (to_char(cohist_invcdate, 'YYYYMM') > to_char((current_date - INTERVAL '4 mon')::date, 'YYYYMM')
