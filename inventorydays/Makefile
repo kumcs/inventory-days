@@ -14,6 +14,6 @@ EXCLUDE = --exclude Makefile --exclude .\*
 TAROPTS = -h
 
 all: FORCE
-	cd .. && find ./inventorydays -name "*~" -exec rm {} \; && tar czf packages/inventorydays-$(VER).gz $(TAROPTS) $(EXCLUDE) inventorydays
+	cd .. && find ./$(PKG) -name "*~" -exec rm {} \; && tar czf packages/$(PKG)-$(VER).gz $(TAROPTS) $(EXCLUDE) $(PKG)
 
 FORCE:
