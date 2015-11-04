@@ -29,6 +29,7 @@ if (metrics.value("MultiWhs") == 't')
 _list.addColumn(qsTr("Class Code"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "classcode_code");
 _list.addColumn(qsTr("Item Number"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "item_number");
 _list.addColumn(qsTr("Item Description"), -1, Qt.AlignLeft, true, "item_descrip1");
+_list.addColumn(qsTr("ABC Class"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "itemsite_abcclass");
 _list.addColumn(_month[3], XTreeWidget.qtyColumn, Qt.AlignRight, true, "month3_qty");
 _list.addColumn(_month[2], XTreeWidget.qtyColumn, Qt.AlignRight, true, "month2_qty");
 _list.addColumn(_month[1], XTreeWidget.qtyColumn, Qt.AlignRight, true, "month1_qty");
@@ -43,12 +44,16 @@ _list.addColumn(qsTr("Inventory Days"), -1, Qt.AlignRight, true, "inventorydays"
 mywindow.setParameterWidgetVisible(true);
 
 var sql = "SELECT classcode_id, classcode_code||' - '||classcode_descrip FROM classcode";
+var abcSql = "SELECT 'A', '" + qsTr("A Class") + "' UNION "
+           + "SELECT 'B', '" + qsTr("B Class") + "' UNION "
+           + "SELECT 'C', '" + qsTr("C Class") + "' ORDER BY 1;";
 
 mywindow.parameterWidget().appendComboBox(qsTr("Class Code"), "classcode", sql,null,false,null); 
 mywindow.parameterWidget().append(qsTr("Item"), "item_id",   ParameterWidget.Item);
 mywindow.parameterWidget().append(qsTr("Cutoff Date"), "cutoff",   ParameterWidget.Date);
 mywindow.parameterWidget().append(qsTr("Show Obsolete"), "showObsolete",   ParameterWidget.Exists);
-mywindow.parameterWidget().append(qsTr("Show 12 Months History"), "show12months",   ParameterWidget.Exists);
+mywindow.parameterWidget().append(qsTr("Show 12 Months History"), "show12months", ParameterWidget.Exists);
+mywindow.parameterWidget().append(qsTr("ABC Class"), "abc_class", ParameterWidget.Multiselect, null, false, abcSql);
 
 function inventoryDaysQuery()
 {
@@ -64,6 +69,7 @@ function inventoryDaysQuery()
     addColumn(qsTr("Class Code"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "classcode_code");
     addColumn(qsTr("Item Number"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "item_number");
     addColumn(qsTr("Item Description"), -1, Qt.AlignLeft, true, "item_descrip1");
+    addColumn(qsTr("ABC Class"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "itemsite_abcclass");
     for (var i = _colCount; i > 0; i--)
     {
       var _col = "month" + i + "_qty";
