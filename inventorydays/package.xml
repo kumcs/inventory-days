@@ -2,12 +2,12 @@
          name="inventorydays"
          developer="Pentuple Consulting New Zealand"
          descrip="Inventory Days of Stock Report"
-         version="1.2.1"
+         version="1.2.2"
          updater="2.2.5">
   <pkgnotes>Inventory Days of Stock add-on package for xTuple ERP.
 
         This file is part of the Inventory Days of Stock customisation package for xTuple ERP,
-        Copyright (c) 2015 by Pentuple Consulting New Zealand (www.pentuple.co.nz).
+        Copyright (c) 2015-2016 by Pentuple Consulting New Zealand (www.pentuple.co.nz).
         It is licensed to you under the Common Public Attribution License
         version 1.0, the full text of which (including xTuple-specific Exhibits)
         is available at www.xtuple.com/CPAL.  By using this software, you agree
@@ -31,7 +31,7 @@
         Inventory Days of Stock customisation add-on package for xTuple ERP.
 
         This file is part of the Inventory Days of Stock customisation package for xTuple ERP,
-        Copyright (c) 2015 by Pentuple Consulting New Zealand (www.pentuple.co.nz).
+        Copyright (c) 2015-2016 by Pentuple Consulting New Zealand (www.pentuple.co.nz).
         It is licensed to you under the Common Public Attribution License
         version 1.0, the full text of which (including xTuple-specific Exhibits)
         is available at www.xtuple.com/CPAL.  By using this software, you agree
