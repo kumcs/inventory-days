@@ -25,7 +25,9 @@ for (var i = 1; i < 13; i++)
 var _list = mywindow.list();
 
 if (metrics.value("MultiWhs") == 't')
+{
   _list.addColumn(qsTr("Site"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "warehous_code");
+}
 _list.addColumn(qsTr("Class Code"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "classcode_code");
 _list.addColumn(qsTr("Item Number"), XTreeWidget.itemColumn, Qt.AlignLeft, true, "item_number");
 _list.addColumn(qsTr("Item Description"), -1, Qt.AlignLeft, true, "item_descrip1");
@@ -46,8 +48,13 @@ mywindow.setParameterWidgetVisible(true);
 var sql = "SELECT classcode_id, classcode_code||' - '||classcode_descrip FROM classcode";
 var abcSql = "SELECT 'A', '" + qsTr("A Class") + "' UNION "
            + "SELECT 'B', '" + qsTr("B Class") + "' UNION "
-           + "SELECT 'C', '" + qsTr("C Class") + "' ORDER BY 1;";
+           + "SELECT 'C', '" + qsTr("C Class") + "' UNION "
+           + "SELECT 'D', '" + qsTr("D Class") + "' ORDER BY 1;";
 
+if (metrics.value("MultiWhs") == 't')
+{
+  mywindow.parameterWidget().append(qsTr("Site"), "site", ParameterWidget.Site); 
+}
 mywindow.parameterWidget().appendComboBox(qsTr("Class Code"), "classcode", sql,null,false,null); 
 mywindow.parameterWidget().append(qsTr("Item"), "item_id",   ParameterWidget.Item);
 mywindow.parameterWidget().append(qsTr("Cutoff Date"), "cutoff",   ParameterWidget.Date);
